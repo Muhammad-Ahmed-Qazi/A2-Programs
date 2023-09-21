@@ -23,7 +23,7 @@ def insertionSort():
 
 while True:
     inp = int(input("Enter a number (-1 to stop): "))
-    if inp == -444:
+    if inp == -1:
         break
     arr.append(inp)
 
