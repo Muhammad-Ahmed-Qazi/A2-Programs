@@ -1,0 +1,29 @@
+// Assuming arrays are initialised.
+
+DECLARE i, j, key1 AS INTEGER
+DECLARE key2, key3 AS STRING
+
+CONSTANT yearSize = 249
+
+i <-- 0
+j <-- 0
+
+FOR i <-- 1 TO yearSize
+    key1 <-- score[i]
+    key2 <-- name[i][1]
+    key3 <-- name[i][2]
+    
+    j <-- i - 1
+    
+    WHILE j >= 0 AND year[j] > key1
+        score[j + 1] <-- score[j]
+        name[j + 1][1] <-- name[j][1]
+        name[j + 1][2] <-- name[j][2]
+        j <-- j - 1
+    END WHILE
+    
+    score[j + 1] <-- key1
+    name[j + 1][1] <-- key2
+    name[j + 1][2] <-- key3
+
+NEXT i
