@@ -1,12 +1,13 @@
-from colorama import Fore, Back, Style, init
+from colorama import Fore, Style, init
 init()
 
 import os, sys
 print("Your current working directory is", os.getcwd())
 curr = input("Enter the path to the folder containing the classes: ")
-# print(os.path.join(str(os.getcwd()) + str(curr)))
 curr = os.path.join(str(os.getcwd()) + str(curr))
+print(curr)
 sys.path.insert(0, curr)
+
 import stack as stClass
 
 operators = {'+': 2, '-': 1, '*': 3, '/': 4}
@@ -26,11 +27,12 @@ def isHigherPrecedent(opCurr, opAgainst):
 def infixToPostfix(exp):
     exp = exp.replace(' ', '')
     for i in range(len(exp)):
-        if exp[i] not in operators.keys() and exp[i] not in brackets and exp[i + 1] == '(':
-            closeIndex = exp.find(')', i)
-            exp = exp[:i] + '(' + exp[i] + '*' + exp[i + 1:closeIndex] + ')' + exp[closeIndex:]
+        if i != len(exp) - 1:
+            if exp[i] not in operators.keys() and exp[i] not in brackets and exp[i + 1] == '(':
+                closeIndex = exp.find(')', i)
+                exp = exp[:i] + '(' + exp[i] + '*' + exp[i + 1:closeIndex] + ')' + exp[closeIndex:]
 
-    print(exp)
+    # print(exp)
 
     stack = stClass.MyStack(len(exp))
     result = ""
@@ -73,8 +75,8 @@ def infixToPostfix(exp):
                 result += popped + " "
                 popped = stack.pop()
 
-        print(result)
-        stack.display()
+        # print(result)
+        # stack.display()
         i += 1
 
     popped = stack.pop()
@@ -101,12 +103,11 @@ def evaluatePostfix(exp):
         
         if curr not in operators.keys() and curr != ' ':
             stack.push(curr)
-        elif curr != ' ':
-            b = float(stack.pop())
-            a = float(stack.pop())
-
-            
+        elif curr != ' ':            
             try:
+                b = float(stack.pop())
+                a = float(stack.pop())
+
                 if curr == '+': result = a + b
                 elif curr == '-': result = a - b
                 elif curr == '*': result = a * b
@@ -138,8 +139,11 @@ while userChoice != 3:
         print(Fore.GREEN + "Postfix expression:", postfix, Style.RESET_ALL)
     elif userChoice == 2:
         if postfix != None:
-            useCalculated = input("Do you want the above converted infix expression to be evaluated? (y/N)\n>>> ")
-            if useCalculated == 'y': print(Fore.GREEN + "Postfix expression:", evaluatePostfix(postfix), Style.RESET_ALL)
+            userCalculated = input("Do you want the above converted infix expression to be evaluated? (y/N)\n>>> ")
+            if userCalculated == 'y': print(Fore.GREEN + "Postfix expression:", evaluatePostfix(postfix), Style.RESET_ALL)
+            elif userCalculated == 'N': 
+                exp = input("Enter the postfix expression: ")
+                print(Fore.GREEN + "Postfix expression:", evaluatePostfix(exp), Style.RESET_ALL)
         else:
             exp = input("Enter the postfix expression: ")
             print(Fore.GREEN + "Postfix expression:", evaluatePostfix(exp), Style.RESET_ALL)
