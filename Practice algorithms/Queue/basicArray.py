@@ -54,7 +54,9 @@ def dequeue():
 # Display function
 def display():
     for i in range(SIZE):
-        if i == front:
+        if i == tail and i == front:
+            print(i+1, ":", queue[i], "<-- Front <-- Tail")
+        elif i == front:
             print(i+1, ":", queue[i], "<-- Front")
         elif i == tail:
             print(i+1, ":", queue[i], "<-- Tail")

@@ -1,7 +1,7 @@
 from colorama import Fore, Style, init
 init()
 
-ARR_SIZE = 6
+ARR_SIZE = 10
 NULL = -1
 
 free = 0
