@@ -3,7 +3,7 @@ init()
 
 # arr = [4, 3, 2, 10, 12, 1, 5, 6]
 arr = list()
-
+ 
 master = 0
 # slave = 0
 
