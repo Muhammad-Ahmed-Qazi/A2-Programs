@@ -15,7 +15,7 @@ class bin_tree():
 class link_list():
     def __init__(self) -> None:
         self.data = None
-        self.head = -1
+        self.next = -1
 
 SIZE = 10
 
@@ -25,7 +25,11 @@ def initialise_arr(adt):
     elif adt == 'b':
         array = [bin_tree()] * SIZE
     elif adt == 'l':
-        array = [link_list()] * SIZE
+        # array = [link_list()] * SIZE # This thing doesn't work because it creates a single object and copies its reference to all the elements of the array
+        array = [link_list() for i in range(SIZE)]
+        for i in range(0, SIZE):
+            array[i].next = i + 1
+        array[SIZE - 1].next = -1
 
     return array
 
@@ -108,7 +112,88 @@ class queue():
         return string[:-2]
 
 class linked_list():
-    pass
+    def __init__(self) -> None:
+        self.array = initialise_arr('l')
+        self.head = -1
+        self.tail = -1
+        self.free = 0
+    
+    def insert(self, data):
+        newNode = 0
+        print(self.array[self.head].data, data)
+        # print(data < self.array[self.head].data)
+
+        if self.free != -1:
+            newNode = self.free
+            self.array[newNode].data = data
+            self.free = self.array[newNode].next
+            if self.head == -1:
+                print("Linked list was empty!")
+                self.head = newNode
+                self.tail = newNode
+                self.array[self.head].next = -1
+            elif data < self.array[self.head].data:
+                print("Data is smaller than the head!")
+                self.array[newNode].next = self.head
+                self.head = newNode
+            elif data > self.array[self.tail].data:
+                print("Data is larger than the tail!")
+                self.array[self.tail].next = newNode
+                self.array[newNode].next = -1
+                self.tail = newNode
+            else:
+                print("Data is somewhere in the middle!")
+                curr = self.head
+                while data > self.array[self.array[curr].next].data:
+                    curr = self.array[curr].next
+                self.array[newNode].next = self.array[curr].next
+                self.array[curr].next = newNode
+            print("Head:", self.head, "Tail:", self.tail)
+        else:
+            return "Overflow error! Data cannot be inserted!"
+
+        return "Insertion successful! Item added to the linked list!"
+    
+    def search(self, data):
+        curr = self.head
+        
+        while curr != -1:
+            if self.array[curr].data == data:
+                return "Data found! Here's the position:", curr
+            curr = self.array[curr].next
+        
+        return "Data not found!", -1
+
+    def delete(self, data):
+        position = self.search(data)[1]
+        
+        if position != -1:
+            if position == self.head:
+                self.head = self.array[self.head].next
+            else:
+                curr = self.head
+                while self.array[curr].next != position:
+                    curr = self.array[curr].next
+                self.array[curr].next = self.array[position].next
+                if position == self.tail:
+                    self.tail = curr
+            self.array[position].next = self.free
+            self.free = position
+        else:
+            return "Item to be deleted was not found!"
+    
+        return "Deletion successful! Item deleted from the linked list!"
+    
+    def display(self):
+        string = ""
+        curr = self.head
+
+        while curr != -1:
+            string = string + str(self.array[curr].data) + ", "
+            curr = self.array[curr].next
+        
+        return string[:-2]
+
 
 class binary_tree():
     pass
@@ -118,12 +203,14 @@ class binary_tree():
     
 my_stack = None
 my_queue = None
+my_linked_list = None
 
 while True:
     print("ADT Menu:")
     print("1. Stack")
     print("2. Queue")
-    print("3. Exit")
+    print("3. Linked List")
+    print("4. Exit")
 
     adt_choice = int(input("Enter your choice for ADT: "))
 
@@ -139,7 +226,7 @@ while True:
             choice = int(input("Enter your choice: "))
 
             if choice == 1:
-                data = input("Enter the item to push: ")
+                data = int(input("Enter the item to push: "))
                 result = my_stack.push(data)
                 print(result)
             elif choice == 2:
@@ -167,7 +254,7 @@ while True:
             choice = int(input("Enter your choice: "))
 
             if choice == 1:
-                data = input("Enter the item to enqueue: ")
+                data = int(input("Enter the item to enqueue: "))
                 result = my_queue.enqueue(data)
                 print(result)
             elif choice == 2:
@@ -184,6 +271,39 @@ while True:
                 print("Invalid choice! Please try again.")
 
     elif adt_choice == 3:
+        my_linked_list = linked_list()
+        while True:
+            print("Linked List Menu:")
+            print("1. Insert")
+            print("2. Search")
+            print("3. Delete")
+            print("4. Display")
+            print("5. Back to ADT Menu")
+
+            choice = int(input("Enter your choice: "))
+
+            if choice == 1:
+                data = int(input("Enter the item to insert: "))
+                result = my_linked_list.insert(data)
+                print(result)
+            elif choice == 2:
+                data = int(input("Enter the item to search: "))
+                result, data = my_linked_list.search(data)
+                print(result, data)
+            elif choice == 3:
+                data = int(input("Enter the item to delete: "))
+                result = my_linked_list.delete(data)
+                print(result)
+            elif choice == 4:
+                result = my_linked_list.display()
+                print(result)
+            elif choice == 5:
+                print("Going back to ADT Menu...")
+                break
+            else:
+                print("Invalid choice! Please try again.")
+
+    elif adt_choice == 4:
         print("Exiting...")
         break
     else:
