@@ -1,4 +1,6 @@
 from colorama import Fore, Back, Style, init
+import time
+
 init()
 
 # arr = [4, 3, 2, 10, 12, 1, 5, 6]
